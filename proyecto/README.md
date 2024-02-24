@@ -1,7 +1,5 @@
 # Sistema de invetario.
 
-Link: [Link to this doc] #
-
 Autor(s): Jose V.
 
 Status:
@@ -21,7 +19,7 @@ Last Update: 2024-02-23
 -Algoritmo y estructuras de Datos.
 -Pruebas.
 
-## Intruction.
+## Introduction.
 El Sistema Simplificado de Inventarios en Python tiene como objetivo proporcionar herramientas de administración básicas para controlar productos y sus cantidades. El sistema almacenará información esencial sobre los productos y permitirá realizar búsquedas, obtener resúmenes del inventario y actualizar la base de datos de manera dinámica.
 
 ## Objetive
