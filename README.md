@@ -2,6 +2,8 @@
 
 Autor(s): Jose V.
 
+link: https://excalidraw.com/#json=FhYh7Wq-qCmGXs1r-lfII,aywucHcFzTgZTjf6zLvMsw
+
 Status:
 
 Last Update: 2024-02-23
