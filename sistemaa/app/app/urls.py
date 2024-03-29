@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.erp.views import home
+from core.erp.views import home, category_list
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', home),
+    path('category/list', category_list, name='category_list')
 ]
