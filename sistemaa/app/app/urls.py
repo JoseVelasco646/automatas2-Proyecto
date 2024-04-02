@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.erp.views import category_list, CategoryCreateView, home, CategoryListView
+from core.erp.views import *
 
 
 urlpatterns = [
@@ -24,5 +24,7 @@ urlpatterns = [
     path('home/', home),
     path('category/list2',CategoryListView.as_view(), name='category_list2'),
     path('category/list', category_list, name='category_list'),
-    path('category/add/', CategoryCreateView.as_view(), name='category_create')
+    path('category/add/', CategoryCreateView.as_view(), name='category_create'),
+    path('category/edit/<int:pk>/', CategoryUpdateView.as_view(), name='category_update')
+
 ]
