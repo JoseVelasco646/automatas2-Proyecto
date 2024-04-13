@@ -4,7 +4,7 @@ from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import render
 from core.erp.forms import CategoryForm
 from django.utils.decorators import method_decorator  
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.views.decorators.csrf import csrf_exempt   
 from django.http import JsonResponse, HttpResponseRedirect            
 from core.erp.models import Category                   
@@ -39,7 +39,7 @@ class CategoryListView(ListView):
             data = Category.objects.get(pk=request.POST['id']).toJSON()
         except Exception as e:
             data['error'] = str(e)
-        return JsonResponse(data)
+        return JsonResponse(data, safe=False)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -78,4 +78,17 @@ class CategoryUpdateView(UpdateView):
         context['entity'] = 'Categorias'
         context['list_url'] = reverse_lazy('category_list')
         context['action'] = 'edit'
+        return context
+    
+
+class CategoryDeleteView(DeleteView):
+    model = Category
+    template_name = 'delete.html'
+    success_url = reverse_lazy('category_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Eliminacion de una categoria'
+        context['entity'] = 'Categorias'
+        context['list_url'] = reverse_lazy('category_list')
         return context
