@@ -4,7 +4,7 @@ from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import render
 from core.erp.forms import CategoryForm
 from django.utils.decorators import method_decorator  
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 from django.views.decorators.csrf import csrf_exempt   
 from django.http import JsonResponse, HttpResponseRedirect            
 from core.erp.models import Category                   
@@ -15,7 +15,8 @@ from django.urls import reverse_lazy
 def home(request):
   
 
-    return render(request, '/home/josev646/Documentos/proyecto/automatas2-Proyecto/sistemaa/app/core/erp/templates/home.html')
+    return render(request, '/home/josev646/Documentos/proyecto/automatas2-Proyecto/sistemaa/app/core/erp/templates/index.html')
+
 
 def category_list(request):
     data = {
@@ -91,4 +92,18 @@ class CategoryDeleteView(DeleteView):
         context['title'] = 'Eliminacion de una categoria'
         context['entity'] = 'Categorias'
         context['list_url'] = reverse_lazy('category_list')
+        return context
+    
+
+class CategoryForm(FormView):
+    form_class = CategoryForm
+    template_name = 'category/create.html'
+    success_url = reverse_lazy (category_list)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Form | Categorías'
+        context['entity'] = 'Categorias'
+        context['list_url'] = reverse_lazy('category_list')
+        context['action'] = 'add'
         return context
