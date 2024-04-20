@@ -15,9 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from core.erp.views import *
-from core.login.views import LoginFormView
+from core.login.views import *
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,8 +28,8 @@ urlpatterns = [
     path('category/add/', CategoryCreateView.as_view(), name='category_create'),
     path('category/edit/<int:pk>/', CategoryUpdateView.as_view(), name='category_update'),
     path('category/delete/<int:pk>/', CategoryDeleteView.as_view(), name='category_delete'),
-    path('category/form', CategoryForm.as_view(), name='category_form'),
-    path('login/', LoginFormView.as_view()),
+    path('category/form/', CategoryFormView.as_view(), name='category_form'),
+    path('login/', include('core.login.urls'))
 
     
 
