@@ -16,7 +16,7 @@ from core.erp.forms import ProductForm
 def home(request):
   
 
-    return render(request, '/home/josev646/Documentos/proyecto/automatas2-Proyecto/sistemaa/app/core/erp/templates/index.html')
+    return render(request, 'index.html')
 
 
 def category_list(request):
