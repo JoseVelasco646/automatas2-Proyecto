@@ -26,6 +26,10 @@ Tener python 3.10.12
 Para ejecutar la aplicacion web.
 
 Dirigirse hasta manage.py.
+<<<<<<< HEAD
+=======
+para crear la bd: python3 manage.py migrate
+>>>>>>> refs/remotes/origin/main
 
 para llegar ahi, automatas2-Proyecto/sistemaa/app/
 
