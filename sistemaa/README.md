@@ -14,7 +14,10 @@ Tener python 3.10.12
 
 
 Para ejecutar la aplicacion web.
+
 Dirigirse hasta manage.py.
+para crear la bd: python3 manage.py migrate
+
 para llegar ahi, automatas2-Proyecto/sistemaa/app/
 
 para crear el usuario se usa el comando: python3 manage.py createsuperuser
