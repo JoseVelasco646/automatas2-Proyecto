@@ -18,20 +18,27 @@ from django.contrib import admin
 from django.urls import path, include
 from core.erp.views import *
 from core.login.views import *
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home),
+    path('', home, name='homee'),
     path('category/list2',CategoryListView.as_view(), name='category_list2'),
     path('category/list', category_list, name='category_list'),
     path('category/add/', CategoryCreateView.as_view(), name='category_create'),
     path('category/edit/<int:pk>/', CategoryUpdateView.as_view(), name='category_update'),
     path('category/delete/<int:pk>/', CategoryDeleteView.as_view(), name='category_delete'),
     path('category/form/', CategoryFormView.as_view(), name='category_form'),
-    path('login/', include('core.login.urls'))
+    path('login/', include('core.login.urls')),
+#####################Producto###################
+    path('product/list', ProductListView.as_view(), name='product_list'),
+    path('product/add/', ProductCreateView.as_view(), name='product_create'),
+    path('product/update/<int:pk>/', ProductUpdateView.as_view(), name='product_update'),
+    path('product/delete/<int:pk>/', ProductDeleteView.as_view(), name='product_delete'),
 
     
 
-
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -7,8 +7,9 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 from django.views.decorators.csrf import csrf_exempt   
 from django.http import JsonResponse, HttpResponseRedirect            
-from core.erp.models import Category                   
-from django.urls import reverse_lazy                                                   
+from core.erp.models import Category, Product                
+from django.urls import reverse_lazy                    
+from core.erp.forms import ProductForm                               
 
 
 # Create your views here.
@@ -116,4 +117,85 @@ class CategoryFormView(FormView):
         context['entity'] = 'Categorias'
         context['list_url'] = reverse_lazy('category_list')
         context['action'] = 'add'
+        return context
+    
+
+##############################################################################################################
+class ProductListView(ListView):
+    model = Product
+    template_name = 'list_product.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Listado de Productos'
+        context['create_url'] = reverse_lazy('product_create')
+        context['list_url'] = reverse_lazy('product_list')
+        context['entity'] = 'Productos'
+        return context
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'creaate_product.html'
+    success_url = reverse_lazy('product_list')
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Creación de un Producto'
+        context['entity'] = 'Productos'
+        context['list_url'] = reverse_lazy('product_list')
+        context['action'] = 'add'
+        return context
+
+
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'creaate_product.html'
+    success_url = reverse_lazy('product_list')
+
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edición de un Producto'
+        context['entity'] = 'Productos'
+        context['list_url'] = reverse_lazy('product_list')
+        context['action'] = 'edit'
+        return context
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'delete_product.html'
+    success_url = reverse_lazy('product_list')
+
+    
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            self.object.delete()
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Eliminación de un Producto'
+        context['entity'] = 'Productos'
+        context['list_url'] = reverse_lazy('product_list')
         return context
