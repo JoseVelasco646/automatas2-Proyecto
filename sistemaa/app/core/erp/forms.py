@@ -3,7 +3,8 @@ from django.core.files.base import File
 from django.db.models.base import Model
 from django.forms import *
 from django.forms.utils import ErrorList
-from core.erp.models import Category, Product
+from core.erp.models import Category, Product, Client
+from datetime import datetime
 
 class CategoryForm(ModelForm):
 
@@ -28,7 +29,7 @@ class CategoryForm(ModelForm):
             ),
             'desc' : Textarea(
                 attrs = {
-                    'placeholder' : 'Ingrese una categoria',
+                    'placeholder' : 'Ingrese una Descripcion',
                     'rows' : 3,
                     'cols' :3
                 }
@@ -43,6 +44,21 @@ class ProductForm(ModelForm):
 
     class Meta:
         model = Product
+        fields = '__all__'
+        widgets = {
+            'name': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese un producto',
+                }
+            ),
+        }
+class ClientForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['autofocus'] = True
+
+    class Meta:
+        model = Client
         fields = '__all__'
         widgets = {
             'name': TextInput(

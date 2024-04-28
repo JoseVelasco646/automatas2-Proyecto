@@ -1,4 +1,5 @@
 from typing import Any
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import render
@@ -7,9 +8,9 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 from django.views.decorators.csrf import csrf_exempt   
 from django.http import JsonResponse, HttpResponseRedirect            
-from core.erp.models import Category, Product                
+from core.erp.models import Category, Product, Client             
 from django.urls import reverse_lazy                    
-from core.erp.forms import ProductForm                               
+from core.erp.forms import ProductForm, ClientForm         
 
 
 # Create your views here.
@@ -27,11 +28,13 @@ def category_list(request):
 
     return render(request, 'list2.html', data)
 
+
 class CategoryListView(ListView):
     model = Category
     template_name = 'list2.html'
 
     @method_decorator (csrf_exempt)
+    @method_decorator (login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
     
@@ -58,7 +61,7 @@ class CategoryCreateView(CreateView):
     template_name = 'create.html'
     success_url = reverse_lazy('category_list')
 
-
+    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -198,4 +201,100 @@ class ProductDeleteView(DeleteView):
         context['title'] = 'Eliminación de un Producto'
         context['entity'] = 'Productos'
         context['list_url'] = reverse_lazy('product_list')
+        return context
+    
+#############################################clientes
+def clientes_list(request):
+    data = {
+        'title': 'Listado de Categorias',
+        'clientes': Client.objects.all()
+    }
+
+    return render(request, 'clientes.html', data)
+
+
+class ClientListView(ListView):
+    model = Client
+    template_name = 'clientes.html'
+
+    @method_decorator (csrf_exempt)
+  #  @method_decorator (login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
+   
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Listado de Clientes'
+        context['create_url'] = reverse_lazy('client_create')
+        context['list_url'] = reverse_lazy('client_list')
+        context['entity'] = 'Clientes'
+        return context
+    
+class ClientCreateView(CreateView):
+
+    model = Client
+    form_class = ClientForm
+    template_name = 'create_client.html'
+    success_url = reverse_lazy('client_list')
+
+    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Creación un cliente'
+        context['entity'] = 'Clientes'
+        context['list_url'] = reverse_lazy('create_client')
+        return context
+    
+
+class ClientUpdateView(UpdateView):
+    model = Client
+    form_class = CategoryForm
+    template_name = 'create.html'
+    success_url = reverse_lazy('category_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edicion de Categorías'
+        context['entity'] = 'Categorias'
+        context['list_url'] = reverse_lazy('category_list')
+        context['action'] = 'edit'
+        return context
+    
+
+class ClientDeleteView(DeleteView):
+    model = Client
+    template_name = 'delete.html'
+    success_url = reverse_lazy('category_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Eliminacion de una categoria'
+        context['entity'] = 'Categorias'
+        context['list_url'] = reverse_lazy('category_list')
+        return context
+    
+
+class ClientFormView(FormView):
+    form_class = ClientForm
+    template_name = 'create.html'
+    success_url = reverse_lazy('category_list')
+
+    def form_valid(self, form):
+        print(form.is_valid())
+        print(form)
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.is_valid())
+        print(form.errors)
+        return super().form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Form | Categoria'
+        context['entity'] = 'Categorias'
+        context['list_url'] = reverse_lazy('category_list')
+        context['action'] = 'add'
         return context

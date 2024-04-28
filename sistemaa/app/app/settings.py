@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.erp',
-    'core.login'
+    'core.login',
+    'widget_tweaks'
     
     
     
@@ -138,3 +139,5 @@ LOGOUT_REDIRECT_URL = '/login/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 MEDIA_URL = '/media/'
+
+LOGIN_URL = '/login/'

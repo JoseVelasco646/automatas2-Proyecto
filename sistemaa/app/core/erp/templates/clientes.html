@@ -1,0 +1,38 @@
+{% extends 'list.html' %}
+
+{% block columns %}
+    <tr>
+        <th scope="col" style="width: 10%;">Nro</th>
+        <th scope="col" style="width: 20%;">Nombre</th>
+        <th scope="col" style="width: 20%;">Apellido</th>
+        <th scope="col" style="width: 30%;">Curp</th>
+        <th scope="col" style="width: 20%;">Fecha de Nacimiento</th>
+        <th scope="col" style="width: 30%;">Direccion</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+        {% for r in clientes %}  
+        <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.name }}</td>
+            <td>{{ r.surnames }}</td>
+            <td>{{ r.curp }}</td>
+            <td>{{ r.date_birthday }}</td>
+            <td>{{ r.address }}</td>
+            <td>
+                <a href="{% url 'client_update' r.id %}"  class="btn btn-warning btn-xs btn-flat">
+                    <i class="fas fa-edit"></i>>
+
+                </a>
+                <a href="{% url 'client_delete' r.id %}"  class="btn btn-danger btn-xs btn-flat">
+                    <i class="fas fa-trash-alt"></i>
+
+                </a>
+                
+            
+                
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}

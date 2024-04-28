@@ -3,9 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.forms import model_to_dict
 
-#from app.settings import MEDIA_URL, STATIC_URL
-#from core.erp.choices import gender_choices
-#from core.models import BaseModel
+from app.settings import MEDIA_URL, STATIC_URL
 
 
 class Category(models.Model):
@@ -14,6 +12,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
     
     def toJSON(self):
         item = model_to_dict(self)
@@ -35,10 +34,6 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-
-
-   
-
     class Meta:
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
@@ -46,13 +41,12 @@ class Product(models.Model):
 
 
 class Client(models.Model):
-    names = models.CharField(max_length=150, verbose_name='Nombres')
+    name = models.CharField(max_length=150, verbose_name='Nombres')
     surnames = models.CharField(max_length=150, verbose_name='Apellidos')
     curp = models.CharField(max_length=10, unique=True, verbose_name='Curp')
     date_birthday = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')
     address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
-    #gender = models.CharField(max_length=10, choices=gender_choices, default='male', verbose_name='Sexo')
-
+   
     def __str__(self):
         return self.get_full_name()
 
@@ -61,7 +55,6 @@ class Client(models.Model):
 
     def toJSON(self):
         item = model_to_dict(self)
-        item['gender'] = {'id': self.gender, 'name': self.get_gender_display()}
         item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
         item['full_name'] = self.get_full_name()
         return item
