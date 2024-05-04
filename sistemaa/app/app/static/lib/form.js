@@ -7,7 +7,7 @@ var vents = {
         total: 0.00,
         products: []
     },
-    calculate_voice: function(){
+    calculate_invoice: function(){
         var subtotal = 0.00;
         var iva = $('input[name="iva"]').val();
         $.each(this.items.products, function (pos, dict){
@@ -28,7 +28,7 @@ var vents = {
         this.list();
     },
     list: function () {
-        this.calculate_voice();
+        this.calculate_invoice();
         $('#tblProducts').DataTable({
             responsive: true,
             autoWidth: false,
@@ -99,12 +99,15 @@ $(function () {
     $("input[name='iva']").TouchSpin({
         min: 0,
         max: 100,
-        step: 0.1,
+        step: 0.01,
         decimals: 2,
         boostat: 5,
         maxboostedstep: 10,
         postfix: '%'
-    }).val(0.12);
+    }).on('change', function(){
+        vents.calculate_invoice();
+    })
+    .val(0.12);
 
     // search products
     $('input[name="search"]').autocomplete({
