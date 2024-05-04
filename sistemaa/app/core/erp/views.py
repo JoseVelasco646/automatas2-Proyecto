@@ -14,9 +14,10 @@ from core.erp.forms import ProductForm, ClientForm
 
 
 # Create your views here.
+
 def home(request):
   
-
+    
     return render(request, 'index.html')
 
 
@@ -32,16 +33,22 @@ def category_list(request):
 class CategoryListView(ListView):
     model = Category
     template_name = 'list2.html'
-
+    
     @method_decorator (csrf_exempt)
-    @method_decorator (login_required)
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
-    
+
     def post(self, request, *args, **kwargs):
         data = {}
         try:
-            data = Category.objects.get(pk=request.POST['id']).toJSON()
+            action = request.POST['action']
+            if action == 'searchdata':
+                data = []
+                for i in Category.objects.all():
+                    data.append(i.toJSON())
+            else:
+                data['error'] = 'Ha ocurrido un error'
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
@@ -61,7 +68,8 @@ class CategoryCreateView(CreateView):
     template_name = 'create.html'
     success_url = reverse_lazy('category_list')
 
-    
+   
+   
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -131,6 +139,20 @@ class ProductListView(ListView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'searchdata':
+                data = []
+                for i in Product.objects.all():
+                    data.append(i.toJSON())
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -206,7 +228,7 @@ class ProductDeleteView(DeleteView):
 #############################################clientes
 def clientes_list(request):
     data = {
-        'title': 'Listado de Categorias',
+        'title': 'Listado de Clientes',
         'clientes': Client.objects.all()
     }
 
@@ -218,7 +240,7 @@ class ClientListView(ListView):
     template_name = 'clientes.html'
 
     @method_decorator (csrf_exempt)
-  #  @method_decorator (login_required)
+    @method_decorator (login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
     
@@ -244,21 +266,21 @@ class ClientCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Creación un cliente'
         context['entity'] = 'Clientes'
-        context['list_url'] = reverse_lazy('create_client')
+        context['list_url'] = reverse_lazy('client_list')
         return context
     
 
 class ClientUpdateView(UpdateView):
     model = Client
-    form_class = CategoryForm
+    form_class = ClientForm
     template_name = 'create.html'
-    success_url = reverse_lazy('category_list')
+    success_url = reverse_lazy('client_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Edicion de Categorías'
-        context['entity'] = 'Categorias'
-        context['list_url'] = reverse_lazy('category_list')
+        context['title'] = 'Edicion de clientes'
+        context['entity'] = 'Clientes'
+        context['list_url'] = reverse_lazy('client_list')
         context['action'] = 'edit'
         return context
     
@@ -266,20 +288,20 @@ class ClientUpdateView(UpdateView):
 class ClientDeleteView(DeleteView):
     model = Client
     template_name = 'delete.html'
-    success_url = reverse_lazy('category_list')
+    success_url = reverse_lazy('client_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Eliminacion de una categoria'
+        context['title'] = 'Eliminacion de clientes'
         context['entity'] = 'Categorias'
-        context['list_url'] = reverse_lazy('category_list')
+        context['list_url'] = reverse_lazy('client_list')
         return context
     
 
 class ClientFormView(FormView):
     form_class = ClientForm
     template_name = 'create.html'
-    success_url = reverse_lazy('category_list')
+    success_url = reverse_lazy('client_list')
 
     def form_valid(self, form):
         print(form.is_valid())
@@ -293,8 +315,8 @@ class ClientFormView(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Form | Categoria'
-        context['entity'] = 'Categorias'
-        context['list_url'] = reverse_lazy('category_list')
+        context['title'] = 'Form | Clientes'
+        context['entity'] = 'Clientes'
+        context['list_url'] = reverse_lazy('client_list')
         context['action'] = 'add'
         return context

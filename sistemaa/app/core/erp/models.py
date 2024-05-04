@@ -34,6 +34,19 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
+    def toJSON(self):
+        item = model_to_dict(self)
+        item['cat'] = self.cat.toJSON()
+        item['image'] = self.get_image()
+        item['pvp'] = format(self.pvp, '.2f')
+        return item
+
+    def get_image(self):
+        if self.image:
+            return '{}{}'.format(MEDIA_URL, self.image)
+        return '{}{}'.format(STATIC_URL, 'img/empty.png')
+
+
     class Meta:
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
@@ -43,7 +56,7 @@ class Product(models.Model):
 class Client(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombres')
     surnames = models.CharField(max_length=150, verbose_name='Apellidos')
-    curp = models.CharField(max_length=10, unique=True, verbose_name='Curp')
+    curp = models.CharField(max_length=18, unique=True, verbose_name='Curp')
     date_birthday = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')
     address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
    
@@ -51,7 +64,7 @@ class Client(models.Model):
         return self.get_full_name()
 
     def get_full_name(self):
-        return '{} {} / {}'.format(self.names, self.surnames, self.curp)
+        return '{} {} / {}'.format(self.name, self.surnames, self.curp)
 
     def toJSON(self):
         item = model_to_dict(self)

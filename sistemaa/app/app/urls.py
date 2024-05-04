@@ -20,6 +20,7 @@ from core.erp.views import *
 from core.login.views import *
 from django.conf import settings
 from django.conf.urls.static import static
+from core.erp.sale.views import SaleCreateView
 
 
 urlpatterns = [
@@ -42,6 +43,7 @@ urlpatterns = [
     path('client/add/', ClientCreateView.as_view(), name='create_client'),
     path('client/update/<int:pk>/', ClientUpdateView.as_view(), name='client_update'),
     path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),
+    path('sale/add/', SaleCreateView.as_view(), name='sale_create'),
 
 
 
