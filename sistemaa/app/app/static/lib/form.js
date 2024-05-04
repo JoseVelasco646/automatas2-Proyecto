@@ -7,11 +7,28 @@ var vents = {
         total: 0.00,
         products: []
     },
+    calculate_voice: function(){
+        var subtotal = 0.00;
+        var iva = $('input[name="iva"]').val();
+        $.each(this.items.products, function (pos, dict){
+            dict.subtotal = dict.cant * parseFloat(dict.pvp)
+            subtotal+=dict.subtotal;
+        });
+        this.items.subtotal = subtotal;
+        this.items.iva = this.items.subtotal * iva;
+        this.items.total = this.items.subtotal + this.items.iva;
+
+        $('input[name="subtotal"]').val(this.items.subtotal.toFixed(2));
+        $('input[name="ivacalc"]').val(this.items.iva.toFixed(2));
+        $('input[name="total"]').val(this.items.total.toFixed(2));
+    },
+    
     add: function(item){
         this.items.products.push(item);
         this.list();
     },
     list: function () {
+        this.calculate_voice();
         $('#tblProducts').DataTable({
             responsive: true,
             autoWidth: false,
@@ -87,7 +104,7 @@ $(function () {
         boostat: 5,
         maxboostedstep: 10,
         postfix: '%'
-    });
+    }).val(0.12);
 
     // search products
     $('input[name="search"]').autocomplete({
