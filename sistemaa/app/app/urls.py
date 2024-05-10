@@ -25,7 +25,8 @@ from core.erp.sale.views import SaleCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name='homee'),
+    path('', include('core.login.urls')),
+    path('home', home, name='homee'),
     path('category/list2',CategoryListView.as_view(), name='category_list2'),
     path('category/list', category_list, name='category_list'),
     path('category/add/', CategoryCreateView.as_view(), name='category_create'),

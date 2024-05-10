@@ -44,13 +44,17 @@
                                 <label>Buscador de productos:</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="search"
-                                           placeholder="Ingrese una descripción de producto" autocomplete="on">
+                                           placeholder="Ingrese un producto" autocomplete="off">
                                     <span class="input-group-append">
                                         <button type="button" class="btn btn-danger btn-flat"><i
                                                 class="fas fa-times"></i></button>
                                       </span>
                                 </div>
                             </div>
+                            <hr>
+                            <button type="button" class="btn btn-danger btn-xs btn-flat btnRemoveAll">
+                                 <i class="fas fa-trash"></i> Eliminar todos mis items
+                            </button>
                             <hr>
                             <table class="table table-bordered" id="tblProducts">
                                 <thead>
@@ -92,8 +96,8 @@
                                 {{ form.iva }}
                             </div>
                             <div class="form-group">
-                                <label>IVA calculado:</label>
-                               <input type="text" class="form-control" readonly name="ivacalc" value="0.0">
+                                <label>IVA Calculado:</label>
+                                <input type="text" class="form-control" readonly name="ivacalc" value="0.00">
                             </div>
                             <div class="form-group">
                                 <label>Total a pagar:</label>
