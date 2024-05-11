@@ -152,22 +152,87 @@ $(function () {
         }
     });
 
-    $('.btnRemoveAll').on('click', function () {
-        if (vents.items.products.length === 0) return false;
-        alert_action('Notificación', '¿Estas seguro de eliminar todos los items de tu detalle?', function () {
-            vents.items.products = [];
-            vents.list();
+    
+    function submit_with_ajax(url, title, content, parameters, callback) {
+        $.confirm({
+            theme: 'material',
+            title: title,
+            icon: 'fa fa-info',
+            content: content,
+            columnClass: 'small',
+            typeAnimated: true,
+            cancelButtonClass: 'btn-primary',
+            draggable: true,
+            dragWindowBorder: false,
+            buttons: {
+                info: {
+                    text: "Si",
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        $.ajax({
+                            url: url, //window.location.pathname
+                            type: 'POST',
+                            data: parameters,
+                            dataType: 'json',
+                            processData: false,
+                            contentType: false,
+                        }).done(function (data) {
+                            console.log(data);
+                            if (!data.hasOwnProperty('error')) {
+                                callback();
+                                return false;
+                            }
+                            message_error(data.error);
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            alert(textStatus + ': ' + errorThrown);
+                        }).always(function (data) {
+    
+                        });
+                    }
+                },
+                danger: {
+                    text: "No",
+                    btnClass: 'btn-red',
+                    action: function () {
+    
+                    }
+                },
+            }
+        })
+    }
+    function message_error(obj) {
+        var html = '';
+        if (typeof (obj) === 'object') {
+            html = '<ul style="text-align: left;">';
+            $.each(obj, function (key, value) {
+                html += '<li>' + key + ': ' + value + '</li>';
+            });
+            html += '</ul>';
+        } else {
+            html = '<p>' + obj + '</p>';
+        }
+        Swal.fire({
+            title: 'Error!',
+            html: html,
+            icon: 'error'
         });
-    });
+    }
+    
+    $('.btnRemoveAll').on('click', function () {
+        vents.items.products = [];
+        vents.list();
+});
 
+$('.btnClearSearch').on('click', function () {
+    $('input[name="search"]').val('').focus();
+});
+    
     // event cant
     $('#tblProducts tbody')
         .on('click', 'a[rel="remove"]', function () {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
-            alert_action('Notificación', '¿Estas seguro de eliminar el producto de tu detalle?', function () {
                 vents.items.products.splice(tr.row, 1);
                 vents.list();
-            });
         })
         .on('change', 'input[name="cant"]', function () {
             console.clear();
@@ -175,6 +240,24 @@ $(function () {
             var tr = tblProducts.cell($(this).closest('td, li')).index();
             vents.items.products[tr.row].cant = cant;
             vents.calculate_invoice();
-            $('td:eq(5)', tblProducts.row(tr.row).node()).html('$' + vents.items.products[tr.row].subtotal.toFixed(2));
+            $('td:eq(5)', tblProducts.row(tr.row).node()).html('$' + vents.items.products[tr.row].subtotal.toFixed(2)); 
         });
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            if(vents.items.products.length === 0){
+                message_error('Debe de ingresar al menos un producto');
+                return false;
+            }
+            vents.items.date_joined = $('input[name="date_joined"]').val();
+            vents.items.cli = $('Select[name="cli"]').val();
+            var parameters = new FormData();
+            parameters.append('action', $('input[name="action"]').val());
+            parameters.append('vents', JSON.stringify(vents.items));
+            submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
+                location.href = '';
+            });
+        });
+    
+        vents.list();
+
 });
