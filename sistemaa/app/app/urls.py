@@ -46,6 +46,7 @@ urlpatterns = [
     path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),
     path('sale/add/', SaleCreateView.as_view(), name='sale_create'),
     path('sale/list', sale_list, name='sale_list'),
+    path('sale/delete/<int:pk>/', SaleDeleteView.as_view(), name='sale_delete'),
 
 
 

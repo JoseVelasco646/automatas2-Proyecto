@@ -1,5 +1,5 @@
 {% extends 'list.html' %}
-
+{% load static %}
 {% block columns %}
     <tr>
         <th scope="col">Nro</th>
@@ -22,11 +22,9 @@
         <td>{{ v.iva}}</td>
         <td>{{ v.total}}</td>
         <td>
-            <a href=""  class="btn btn-warning btn-xs btn-flat">
-                <i class="fas fa-edit"></i>>
 
             </a>
-            <a href=""  class="btn btn-danger btn-xs btn-flat">
+            <a href="{% url 'sale_delete' v.id %}"  class="btn btn-danger btn-xs btn-flat">
                 <i class="fas fa-trash-alt"></i>
 
             </a>

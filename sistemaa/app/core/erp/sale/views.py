@@ -20,8 +20,7 @@ class SaleListView(ListView):
     model = Sale
     template_name = 'sale_list.html'
     
-    @method_decorator (csrf_exempt)
-
+    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -32,6 +31,10 @@ class SaleListView(ListView):
             if action == 'searchdata':
                 data = []
                 for i in Sale.objects.all():
+                    data.append(i.toJSON())
+            elif action == 'search_details_prod':
+                data = []
+                for i in DetSale.objects.filter(sale_id=request.POST['id']):
                     data.append(i.toJSON())
             else:
                 data['error'] = 'Ha ocurrido un error'
@@ -99,4 +102,31 @@ class SaleCreateView(CreateView):
         context['entity'] = 'Ventas'
         context['list_url'] = self.success_url
         context['action'] = 'add'
+        return context
+
+class SaleUpdateView(UpdateView):
+    model = Sale
+    form_class = SaleForm
+    template_name = 'create_sale.html'
+    success_url = reverse_lazy('sale_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edicion de Ventas'
+        context['entity'] = 'Ventas'
+        context['list_url'] = reverse_lazy('sale_list')
+        context['action'] = 'edit'
+        return context
+    
+
+class SaleDeleteView(DeleteView):
+    model = Sale
+    template_name = 'delete.html'
+    success_url = reverse_lazy('sale_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Eliminacion de una venta'
+        context['entity'] = 'Ventas'
+        context['list_url'] = reverse_lazy('sale_list')
         return context
