@@ -6,6 +6,46 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.shortcuts import render
+
+def sale_list(request):
+    data = {
+        'title': 'Listado de Ventas',
+        'ventas': Sale.objects.all()
+    }
+
+    return render(request, 'sale_list.html', data)
+
+class SaleListView(ListView):
+    model = Sale
+    template_name = 'sale_list.html'
+    
+    @method_decorator (csrf_exempt)
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'searchdata':
+                data = []
+                for i in Sale.objects.all():
+                    data.append(i.toJSON())
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Listado de Ventas'
+        context['create_url'] = reverse_lazy('sale_create')
+        context['list_url'] = reverse_lazy('sale_list')
+        context['entity'] = 'Ventas'
+        return context
 
 
 class SaleCreateView(CreateView):
@@ -13,7 +53,7 @@ class SaleCreateView(CreateView):
     model = Sale
     form_class = SaleForm
     template_name = 'create_sale.html'
-    success_url = reverse_lazy('category_list')
+    success_url = reverse_lazy('sale_list')
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):

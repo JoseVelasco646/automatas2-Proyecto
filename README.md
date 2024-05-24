@@ -6,7 +6,7 @@ link: https://excalidraw.com/#json=FhYh7Wq-qCmGXs1r-lfII,aywucHcFzTgZTjf6zLvMsw
 
 Status:
 
-Last Update: 2024-04-12
+Last Update: 2024-05-23
 
 ### Contents
 -Introduccion.

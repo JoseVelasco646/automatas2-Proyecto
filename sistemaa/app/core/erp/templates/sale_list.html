@@ -1,0 +1,40 @@
+{% extends 'list.html' %}
+
+{% block columns %}
+    <tr>
+        <th scope="col">Nro</th>
+        <th scope="col">Cliente</th>
+        <th scope="col">Fecha de registro</th>
+        <th scope="col">Subtotal</th>
+        <th scope="col">Iva</th>
+        <th scope="col">Total</th>
+        <th scope="col">Opciones</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+{% for v in ventas %}
+    <tr>
+        <td>{{ v.id }}</td>
+        <td>{{ v.cli }}</td>
+        <td>{{ v.date_joined }}</td>
+        <td>{{ v.subtotal}}</td>
+        <td>{{ v.iva}}</td>
+        <td>{{ v.total}}</td>
+        <td>
+            <a href=""  class="btn btn-warning btn-xs btn-flat">
+                <i class="fas fa-edit"></i>>
+
+            </a>
+            <a href=""  class="btn btn-danger btn-xs btn-flat">
+                <i class="fas fa-trash-alt"></i>
+
+            </a>
+            
+        
+            
+        </td>
+    </tr>
+{% endfor %}
+{% endblock %}
+
